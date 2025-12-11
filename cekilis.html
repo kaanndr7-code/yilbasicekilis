@@ -11,7 +11,6 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
-
 body {
   margin: 0;
   padding: 0;
@@ -162,7 +161,7 @@ button:hover {
   color: #6b7280;
 }
 
-/* KAR */
+/* Kar Efekti */
 .snowflake {
   position: fixed;
   top: -10px;
@@ -174,7 +173,6 @@ button:hover {
   animation-iteration-count: infinite;
   pointer-events: none;
 }
-
 @keyframes fall {
   0% { transform: translateY(-10px); opacity: 1; }
   100% { transform: translateY(100vh); opacity: 0; }
@@ -187,7 +185,7 @@ button:hover {
 </head>
 <body>
 
-<!-- KAR EFEKTİ -->
+<!-- Kar Efektleri -->
 <script>
 for (let i = 0; i < 60; i++) {
   let snow = document.createElement("div");
@@ -201,9 +199,9 @@ for (let i = 0; i < 60; i++) {
 }
 </script>
 
-<!-- MÜZİK -->
+<!-- Müzik -->
 <audio id="bgMusic" autoplay loop>
-  <source src="music.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/audio/2023/11/14/audio_3ac193c2b2.mp3" type="audio/mpeg">
 </audio>
 <script>
 document.addEventListener("click", () => {
@@ -215,9 +213,10 @@ document.addEventListener("click", () => {
 
 <div class="container">
   <h1>🎁 Yılbaşı Çekilişi <span>Simülatörü</span></h1>
+
   <div class="subtitle">
-    Özel kişi için ek kural: <b>Hem hediye vereceği kişi, hem de hediyeyi alacağı kişi tanıdık listesinden olacak.</b><br>
-    Diğer herkes için normal gizli çekiliş yapılır. Sonuçlar QR kartı olarak verilir.
+    Özel kural: <b>Özel kişi hem hediye vereceği hem alacağı kişi için sadece tanıdık listesini kullanır.</b><br>
+    Sonuçlar QR ile fotoğraf şeklinde açılır.
   </div>
 
   <div class="grid">
@@ -227,24 +226,19 @@ document.addEventListener("click", () => {
 Kaan
 Ayşe
 Mehmet
-Zeynep
-..."></textarea>
-      <div class="hint">İsimler birebir aynı yazılmalı (büyük/küçük harf önemli değil).</div>
+Zeynep"></textarea>
+      <div class="hint">İsimler birebir aynı olmalı.</div>
     </div>
 
     <div>
       <label for="specialName">Özel Kişi</label>
       <input id="specialName" placeholder="Örn: Kaan">
 
-      <label for="knownListInput" style="margin-top:10px;">Bu Kişinin Tanıdıkları</label>
+      <label for="knownListInput" style="margin-top:10px;">Bu kişinin tanıdıkları</label>
       <textarea id="knownListInput" placeholder="Örn:
 Ayşe
-Mehmet
-Zeynep"></textarea>
-      <div class="hint">
-        Özel kişi, bu listeden birine hediye verir ve yine bu listedeki birinden hediye alır.<br>
-        Özel kişinin adını bu listeye yazma.
-      </div>
+Mehmet"></textarea>
+      <div class="hint">Özel kişinin adı buraya yazılmaz.</div>
     </div>
   </div>
 
@@ -256,7 +250,7 @@ Zeynep"></textarea>
 
   <div id="resultArea" style="display:none;">
     <h2 style="margin-top:28px; text-align:center;">📱 Kişiye Özel QR Kartları</h2>
-    <p class="hint" style="text-align:center;">Her QR’ı ilgili kişiye gönder. QR'ı okuttuklarında sadece kendi sonuçlarını görecekler.</p>
+    <p class="hint" style="text-align:center;">Her QR kişiye özel sonuç sayfasını açar.</p>
     <div class="qr-grid" id="qrGrid"></div>
   </div>
 </div>
@@ -270,12 +264,7 @@ function shuffle(a){
   return a;
 }
 
-/*
-  ÖZEL KURAL:
-  - Kimse kendine çıkmıyor
-  - Özel kişinin receiver'ı (hediye vereceği kişi) tanıdıklardan
-  - Özel kişiye hediye verecek kişi (special'i receiver olarak alan kişi) de tanıdıklardan
-*/
+// Özel kurallı eşleştirme
 function generateAssignments(participants, specialName, allowedList) {
   const n = participants.length;
   const specialIndex = participants.findIndex(
@@ -297,8 +286,8 @@ function generateAssignments(participants, specialName, allowedList) {
       }
     }
 
-    // 2) Özel kişinin hediye vereceği kişi tanıdıklardan olsun
-    const recForSpecial = receivers[specialIndex]; // special → ?
+    // 2) Özel kişinin vereceği kişi tanıdıklardan olsun
+    const recForSpecial = receivers[specialIndex];
     if (!allowedLower.includes(recForSpecial.toLowerCase())) {
       continue;
     }
@@ -306,16 +295,14 @@ function generateAssignments(participants, specialName, allowedList) {
     // 3) Özel kişiye hediye veren kişi de tanıdıklardan olsun
     const giverIndex = receivers.findIndex(
       r => r.toLowerCase() === specialName.toLowerCase()
-    ); // ? → special
-
-    if (giverIndex === -1) continue attemptLoop; // teoriye göre olmaz ama yine de dursun
+    );
+    if (giverIndex === -1) continue attemptLoop;
 
     const giverName = participants[giverIndex];
     if (!allowedLower.includes(giverName.toLowerCase())) {
       continue;
     }
 
-    // Buraya geldiysek tüm kurallar sağlandı
     return participants.map((giver, i) => ({
       giver: giver,
       receiver: receivers[i]
@@ -330,9 +317,9 @@ function runDraw(){
   const specialRaw = document.getElementById("specialName").value.trim();
   const knownRaw   = document.getElementById("knownListInput").value;
 
-  const msg       = document.getElementById("message");
-  const qrGrid    = document.getElementById("qrGrid");
-  const resultArea= document.getElementById("resultArea");
+  const msg        = document.getElementById("message");
+  const qrGrid     = document.getElementById("qrGrid");
+  const resultArea = document.getElementById("resultArea");
 
   msg.innerHTML = "";
   qrGrid.innerHTML = "";
@@ -342,23 +329,23 @@ function runDraw(){
     .split("\n").map(x => x.trim()).filter(Boolean);
 
   if (participants.length < 2) {
-    msg.innerHTML = '<div class="error">En az 2 kişi girmelisin.</div>';
+    msg.innerHTML = '<div class="error">En az 2 kişi gerekli.</div>';
     return;
   }
 
   const lowerNames = participants.map(p => p.toLowerCase());
   if (new Set(lowerNames).size !== participants.length) {
-    msg.innerHTML = '<div class="error">Aynı ismi iki kez girdin. İsimler benzersiz olmalı.</div>';
+    msg.innerHTML = '<div class="error">Aynı isim iki kez girilmiş.</div>';
     return;
   }
 
   if (!specialRaw) {
-    msg.innerHTML = '<div class="error">Özel kişiyi girmelisin.</div>';
+    msg.innerHTML = '<div class="error">Özel kişiyi yazmalısın.</div>';
     return;
   }
 
   if (!participants.some(p => p.toLowerCase() === specialRaw.toLowerCase())) {
-    msg.innerHTML = '<div class="error">Özel kişi katılımcı listesinde yok.</div>';
+    msg.innerHTML = '<div class="error">Özel kişi listede yok.</div>';
     return;
   }
 
@@ -366,7 +353,7 @@ function runDraw(){
     .split("\n").map(x => x.trim()).filter(Boolean);
 
   if (knownList.length === 0) {
-    msg.innerHTML = '<div class="error">Özel kişinin tanıdığı en az 1 kişi girmelisin.</div>';
+    msg.innerHTML = '<div class="error">Tanıdık listesi boş olamaz.</div>';
     return;
   }
 
@@ -374,38 +361,35 @@ function runDraw(){
     name => name.toLowerCase() !== specialRaw.toLowerCase()
   );
 
-  if (knownList.length === 0) {
-    msg.innerHTML = '<div class="error">Tanıdık listesinde sadece özel kişi var. Diğer tanıdıkları da eklemelisin.</div>';
-    return;
-  }
-
-  // Tanıdıklar gerçekten katılımcı mı?
   const validKnown = knownList.filter(kn =>
     participants.some(p => p.toLowerCase() === kn.toLowerCase())
   );
 
-  if (validKnown.length === 0) {
-    msg.innerHTML = '<div class="error">Tanıdık listendekilerin hiçbiri katılımcı listesinde yok. İsimleri kontrol et.</div>';
-    return;
-  }
-
   const assignments = generateAssignments(participants, specialRaw, validKnown);
 
   if (!assignments) {
-    msg.innerHTML = '<div class="error">Bu kurallarla geçerli bir çekiliş bulunamadı. Tanıdık listesini biraz genişletmeyi dene.</div>';
+    msg.innerHTML = '<div class="error">Uygun çekiliş bulunamadı. Tanıdık listesini genişlet.</div>';
     return;
   }
 
-  msg.innerHTML = '<div class="ok">Çekiliş tamam! Aşağıda kişiye özel QR kartlarını görebilirsin. 🎉</div>';
+  msg.innerHTML = '<div class="ok">Çekiliş tamam! QR kartları aşağıda.</div>';
+
+  // SENİN GITHUB PAGES URL'İN:
+  const baseUrl = "https://kaanndr7-code.github.io/yilbasicekilis/";
 
   assignments.forEach(row => {
     const giver    = row.giver;
     const receiver = row.receiver;
 
-    const textForQR = `🎄 Yılbaşı çekilişi sonucunda sana çıkan kişi: ${receiver}`;
+    const resultUrl =
+      baseUrl + "sonuc.html?ad=" +
+      encodeURIComponent(giver) +
+      "&cikti=" +
+      encodeURIComponent(receiver);
 
-    const qrURL = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
-                  encodeURIComponent(textForQR);
+    const qrURL =
+      "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
+      encodeURIComponent(resultUrl);
 
     const card = document.createElement("div");
     card.className = "qr-card";
@@ -413,7 +397,7 @@ function runDraw(){
       <h3>${giver}</h3>
       <p>Bu QR sadece <b>${giver}</b> için.</p>
       <img src="${qrURL}" alt="QR - ${giver}">
-      <div class="admin-line">(Admin için: ${giver} → ${receiver})</div>
+      <div class="admin-line">(Admin: ${giver} → ${receiver})</div>
     `;
     qrGrid.appendChild(card);
   });
