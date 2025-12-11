@@ -1,1 +1,410 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>🎄 Yılbaşı Çekilişi Simülatörü</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #020617 0%, #0f172a 100%);
+  color: #f9fafb;
+  overflow-x: hidden;
+}
+
+.container {
+  margin: 32px auto;
+  max-width: 1000px;
+  width: 90%;
+  background: rgba(15, 23, 42, 0.75);
+  border-radius: 18px;
+  padding: 32px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  backdrop-filter: blur(12px);
+}
+
+h1 {
+  text-align: center;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+h1 span {
+  color: #facc15;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 15px;
+  color: #d1d5db;
+  margin-bottom: 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+textarea, input {
+  width: 100%;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 15px;
+  background: rgba(2, 6, 23, 0.75);
+  color: #f9fafb;
+  border: 1px solid #334155;
+}
+
+textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.hint {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+button {
+  width: 260px;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  font-size: 18px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #f97316, #facc15);
+  color: #111827;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(250, 204, 21, 0.35);
+  transition: .1s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(250,204,21,0.45);
+}
+
+.error, .ok {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  border: 1px solid;
+}
+
+.error {
+  background: rgba(153, 27, 27, 0.75);
+  border-color: #b91c1c;
+  color: #fecaca;
+}
+
+.ok {
+  background: rgba(22, 101, 52, 0.6);
+  border-color: #16a34a;
+  color: #bbf7d0;
+}
+
+.qr-grid {
+  margin-top: 25px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+}
+
+.qr-card {
+  background: rgba(15,23,42,0.85);
+  border: 1px solid rgba(148,163,184,0.25);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+}
+
+.qr-card h3 {
+  color: #facc15;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.qr-card p {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.qr-card img {
+  margin-top: 8px;
+  width: 180px;
+  height: 180px;
+  background: black;
+  border-radius: 10px;
+}
+
+.admin-line {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* Kar Efekti */
+.snowflake {
+  position: fixed;
+  top: -10px;
+  color: white;
+  opacity: 0.8;
+  font-size: 18px;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  pointer-events: none;
+}
+@keyframes fall {
+  0% { transform: translateY(-10px); opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+@media (max-width: 600px) {
+  button { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- Kar Efektleri -->
+<script>
+for (let i = 0; i < 60; i++) {
+  let snow = document.createElement("div");
+  snow.className = "snowflake";
+  snow.innerHTML = "❄";
+  snow.style.left = Math.random() * 100 + "%";
+  snow.style.fontSize = (Math.random() * 14 + 10) + "px";
+  snow.style.animationDuration = (Math.random() * 7 + 5) + "s";
+  snow.style.opacity = Math.random();
+  document.body.appendChild(snow);
+}
+</script>
+
+<!-- Müzik -->
+<audio id="bgMusic" autoplay loop>
+  <source src="https://cdn.pixabay.com/audio/2023/11/14/audio_3ac193c2b2.mp3" type="audio/mpeg">
+</audio>
+<script>
+document.addEventListener("click", () => {
+  const music = document.getElementById("bgMusic");
+  music.volume = 0.35;
+  music.play().catch(()=>{});
+});
+</script>
+
+<div class="container">
+  <h1>🎁 Yılbaşı Çekilişi <span>Simülatörü</span></h1>
+
+  <div class="subtitle">
+    Özel kural: <b>Özel kişi hem hediye vereceği hem alacağı kişi için sadece tanıdık listesini kullanır.</b><br>
+    Sonuçlar QR ile fotoğraf şeklinde açılır.
+  </div>
+
+  <div class="grid">
+    <div>
+      <label for="namesInput">Tüm Katılımcılar (her satıra bir isim)</label>
+      <textarea id="namesInput" placeholder="Örn:
+Kaan
+Ayşe
+Mehmet
+Zeynep"></textarea>
+      <div class="hint">İsimler birebir aynı olmalı.</div>
+    </div>
+
+    <div>
+      <label for="specialName">Özel Kişi</label>
+      <input id="specialName" placeholder="Örn: Kaan">
+
+      <label for="knownListInput" style="margin-top:10px;">Bu kişinin tanıdıkları</label>
+      <textarea id="knownListInput" placeholder="Örn:
+Ayşe
+Mehmet"></textarea>
+      <div class="hint">Özel kişinin adı buraya yazılmaz.</div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:10px;">
+    <button onclick="runDraw()">🎲 Çekilişi Yap & QR'ları Oluştur</button>
+  </div>
+
+  <div id="message"></div>
+
+  <div id="resultArea" style="display:none;">
+    <h2 style="margin-top:28px; text-align:center;">📱 Kişiye Özel QR Kartları</h2>
+    <p class="hint" style="text-align:center;">Her QR kişiye özel sonuç sayfasını açar.</p>
+    <div class="qr-grid" id="qrGrid"></div>
+  </div>
+</div>
+
+<script>
+function shuffle(a){
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Özel kurallı eşleştirme
+function generateAssignments(participants, specialName, allowedList) {
+  const n = participants.length;
+  const specialIndex = participants.findIndex(
+    p => p.toLowerCase() === specialName.toLowerCase()
+  );
+  if (specialIndex === -1) return null;
+
+  const allowedLower = allowedList.map(x => x.toLowerCase());
+  const maxTries = 8000;
+
+  attemptLoop:
+  for (let attempt = 0; attempt < maxTries; attempt++) {
+    const receivers = shuffle([...participants]);
+
+    // 1) Kimse kendine çıkmasın
+    for (let i = 0; i < n; i++) {
+      if (participants[i].toLowerCase() === receivers[i].toLowerCase()) {
+        continue attemptLoop;
+      }
+    }
+
+    // 2) Özel kişinin vereceği kişi tanıdıklardan olsun
+    const recForSpecial = receivers[specialIndex];
+    if (!allowedLower.includes(recForSpecial.toLowerCase())) {
+      continue;
+    }
+
+    // 3) Özel kişiye hediye veren kişi de tanıdıklardan olsun
+    const giverIndex = receivers.findIndex(
+      r => r.toLowerCase() === specialName.toLowerCase()
+    );
+    if (giverIndex === -1) continue attemptLoop;
+
+    const giverName = participants[giverIndex];
+    if (!allowedLower.includes(giverName.toLowerCase())) {
+      continue;
+    }
+
+    return participants.map((giver, i) => ({
+      giver: giver,
+      receiver: receivers[i]
+    }));
+  }
+
+  return null;
+}
+
+function runDraw(){
+  const namesRaw   = document.getElementById("namesInput").value;
+  const specialRaw = document.getElementById("specialName").value.trim();
+  const knownRaw   = document.getElementById("knownListInput").value;
+
+  const msg        = document.getElementById("message");
+  const qrGrid     = document.getElementById("qrGrid");
+  const resultArea = document.getElementById("resultArea");
+
+  msg.innerHTML = "";
+  qrGrid.innerHTML = "";
+  resultArea.style.display = "none";
+
+  let participants = namesRaw
+    .split("\n").map(x => x.trim()).filter(Boolean);
+
+  if (participants.length < 2) {
+    msg.innerHTML = '<div class="error">En az 2 kişi gerekli.</div>';
+    return;
+  }
+
+  const lowerNames = participants.map(p => p.toLowerCase());
+  if (new Set(lowerNames).size !== participants.length) {
+    msg.innerHTML = '<div class="error">Aynı isim iki kez girilmiş.</div>';
+    return;
+  }
+
+  if (!specialRaw) {
+    msg.innerHTML = '<div class="error">Özel kişiyi yazmalısın.</div>';
+    return;
+  }
+
+  if (!participants.some(p => p.toLowerCase() === specialRaw.toLowerCase())) {
+    msg.innerHTML = '<div class="error">Özel kişi listede yok.</div>';
+    return;
+  }
+
+  let knownList = knownRaw
+    .split("\n").map(x => x.trim()).filter(Boolean);
+
+  if (knownList.length === 0) {
+    msg.innerHTML = '<div class="error">Tanıdık listesi boş olamaz.</div>';
+    return;
+  }
+
+  knownList = knownList.filter(
+    name => name.toLowerCase() !== specialRaw.toLowerCase()
+  );
+
+  const validKnown = knownList.filter(kn =>
+    participants.some(p => p.toLowerCase() === kn.toLowerCase())
+  );
+
+  const assignments = generateAssignments(participants, specialRaw, validKnown);
+
+  if (!assignments) {
+    msg.innerHTML = '<div class="error">Uygun çekiliş bulunamadı. Tanıdık listesini genişlet.</div>';
+    return;
+  }
+
+  msg.innerHTML = '<div class="ok">Çekiliş tamam! QR kartları aşağıda.</div>';
+
+  // SENİN GITHUB PAGES URL'İN:
+  const baseUrl = "https://kaanndr7-code.github.io/yilbasicekilis/";
+
+  assignments.forEach(row => {
+    const giver    = row.giver;
+    const receiver = row.receiver;
+
+    const resultUrl =
+      baseUrl + "sonuc.html?ad=" +
+      encodeURIComponent(giver) +
+      "&cikti=" +
+      encodeURIComponent(receiver);
+
+    const qrURL =
+      "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
+      encodeURIComponent(resultUrl);
+
+    const card = document.createElement("div");
+    card.className = "qr-card";
+    card.innerHTML = `
+      <h3>${giver}</h3>
+      <p>Bu QR sadece <b>${giver}</b> için.</p>
+      <img src="${qrURL}" alt="QR - ${giver}">
+      <div class="admin-line">(Admin: ${giver} → ${receiver})</div>
+    `;
+    qrGrid.appendChild(card);
+  });
+
+  resultArea.style.display = "block";
+}
+</script>
+
+</body>
+</html>
