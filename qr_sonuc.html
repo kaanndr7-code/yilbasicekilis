@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>🎁 Çekiliş Sonucun</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: #020617;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Kartın arka planı fotoğraf gibi */
+.card {
+  position: relative;
+  width: 340px;
+  height: 520px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  background-image: url("https://cdn.pixabay.com/photo/2018/11/20/21/17/christmas-3822355_1280.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+/* Karanlık overlay */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15,23,42,0.85), rgba(15,23,42,0.3));
+}
+
+/* İçerik */
+.content {
+  position: relative;
+  height: 100%;
+  padding: 24px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title {
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: #facc15;
+}
+
+.name {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 22px;
+}
+
+.result-block {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.label {
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
+.result-name {
+  margin-top: 8px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #f97316;
+}
+
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: #e5e7eb;
+  opacity: 0.9;
+}
+
+/* Küçük kar taneleri */
+.snow {
+  position: absolute;
+  top: -10px;
+  color: #fff;
+  font-size: 14px;
+  opacity: 0.8;
+  animation: fall 10s linear infinite;
+}
+@keyframes fall {
+  0% { transform: translateY(-10px); opacity: 1; }
+  100% { transform: translateY(540px); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <!-- Kartın içinde de hafif kar -->
+  <script>
+    for (let i = 0; i < 25; i++) {
+      const s = document.createElement("div");
+      s.className = "snow";
+      s.innerHTML = "❄";
+      s.style.left = Math.random()*100 + "%";
+      s.style.animationDuration = (Math.random()*5+5) + "s";
+      s.style.fontSize = (Math.random()*6+10) + "px";
+      document.currentScript.parentElement.appendChild(s);
+    }
+  </script>
+
+  <div class="content">
+    <div>
+      <div class="title">🎄 Yılbaşı Çekilişi</div>
+      <div id="userName" class="name"></div>
+      <div class="result-block">
+        <div class="label">Sana çıkan kişi:</div>
+        <div id="resultName" class="result-name"></div>
+      </div>
+    </div>
+    <div class="footer">
+      Güzel günlerde kullanmanız dileğiyle. ✨
+    </div>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const ad    = params.get("ad");
+const cikti = params.get("cikti");
+
+const userNameEl   = document.getElementById("userName");
+const resultNameEl = document.getElementById("resultName");
+
+if(!ad || !cikti){
+  userNameEl.textContent   = "Geçersiz bağlantı";
+  resultNameEl.textContent = "";
+} else {
+  userNameEl.textContent   = ad;
+  resultNameEl.textContent = cikti;
+}
+</script>
+
+</body>
+</html>
