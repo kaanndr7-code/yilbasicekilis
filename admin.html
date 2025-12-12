@@ -376,21 +376,21 @@ function runDraw(){
   msg.innerHTML = '<div class="ok">Çekiliş tamam! QR kartları aşağıda.</div>';
 
   // SENİN GITHUB PAGES URL'İN:
-  const baseUrl = "https://kaanndr7-code.github.io/yilbasicekilis/";
-
   assignments.forEach(row => {
-    const giver    = row.giver;
-    const receiver = row.receiver;
+  const giver    = row.giver;
+  const receiver = row.receiver;
 
-    const resultUrl =
-      baseUrl + "qr_sonuc.html?ad=" +
-      encodeURIComponent(giver) +
-      "&cikti=" +
-      encodeURIComponent(receiver);
+  // 🔑 DOĞRU QR LİNKİ BURADA OLUŞUYOR
+  const base = new URL(".", window.location.href);
+  const url  = new URL("qr_sonuc.html", base);
+  url.searchParams.set("ad", giver);
+  url.searchParams.set("cikti", receiver);
 
-    const qrURL =
-      "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
-      encodeURIComponent(resultUrl);
+  const resultUrl = url.toString();
+
+  const qrURL =
+    "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
+    encodeURIComponent(resultUrl);
 
     const card = document.createElement("div");
     card.className = "qr-card";
